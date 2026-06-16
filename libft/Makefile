@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = $(wildcard *.c)
 
-OBJDIR = obj
+OBJDIR = objs
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 AR = ar rcs
@@ -12,7 +12,7 @@ AR = ar rcs
 # -------------------- RULES --------------------
 
 all: $(NAME)
-
+git@github.com:kabasolo04/ft_ls.git
 $(NAME): $(OBJS)
 	@$(AR) $(NAME) $(OBJS)
 	@echo ""
