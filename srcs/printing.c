@@ -51,32 +51,59 @@ static char *get_group_cached(gid_t gid)
 	return gr ? gr->gr_name : "nogroup";
 }
 
-static void	print_permissions(struct stat st)
+
+static char get_attr_indicator(const char *path)
+{
+	(void)path;
+	return '.';
+}
+
+static char	file_tipe(mode_t mode)
+{
+	if (S_ISREG(mode))
+		return ('-');
+	else if (S_ISDIR(mode))
+		return ('d');
+	else if (S_ISLNK(mode))
+		return ('l');
+	else if (S_ISBLK(mode))
+		return ('b');
+	else if (S_ISCHR(mode))
+		return ('c');
+	else if (S_ISSOCK(mode))
+		return ('s');
+	else if (S_ISFIFO(mode))
+		return ('p');
+	else
+		return ('-');
+}
+
+static void	print_permissions(t_file f)
 {
 	char buf[20];
 	int idx = 0;
 
-	if (S_ISREG(st.st_mode))		buf[idx++] = '-';
-	else if (S_ISDIR(st.st_mode))	buf[idx++] = 'd';
-	else if (S_ISLNK(st.st_mode))	buf[idx++] = 'l';
+	buf[idx++] = file_tipe(f.st.st_mode);
 
-	buf[idx++] = (st.st_mode & S_IRUSR) ? 'r' : '-';
-	buf[idx++] = (st.st_mode & S_IWUSR) ? 'w' : '-';
-	buf[idx++] = (st.st_mode & S_IXUSR) ? 'x' : '-';
-	buf[idx++] = (st.st_mode & S_IRGRP) ? 'r' : '-';
-	buf[idx++] = (st.st_mode & S_IWGRP) ? 'w' : '-';
-	buf[idx++] = (st.st_mode & S_IXGRP) ? 'x' : '-';
-	buf[idx++] = (st.st_mode & S_IROTH) ? 'r' : '-';
-	buf[idx++] = (st.st_mode & S_IWOTH) ? 'w' : '-';
-	buf[idx++] = (st.st_mode & S_IXOTH) ? 'x' : '-';
-	buf[idx++] = '.';
+	buf[idx++] = (f.st.st_mode & S_IRUSR) ? 'r' : '-';
+	buf[idx++] = (f.st.st_mode & S_IWUSR) ? 'w' : '-';
+	buf[idx++] = (f.st.st_mode & S_IXUSR) ? 'x' : '-';
+	buf[idx++] = (f.st.st_mode & S_IRGRP) ? 'r' : '-';
+	buf[idx++] = (f.st.st_mode & S_IWGRP) ? 'w' : '-';
+	buf[idx++] = (f.st.st_mode & S_IXGRP) ? 'x' : '-';
+	buf[idx++] = (f.st.st_mode & S_IROTH) ? 'r' : '-';
+	buf[idx++] = (f.st.st_mode & S_IWOTH) ? 'w' : '-';
+	buf[idx++] = (f.st.st_mode & S_IXOTH) ? 'x' : '-';
+
+	buf[idx++] = get_attr_indicator(f.path);
 	buf[idx++] = ' ';
+	
 	write(1, buf, idx);
 
-	ft_printf("%u %s %s %d ", st.st_nlink, get_user_cached(st.st_uid), get_group_cached(st.st_gid), st.st_size);
+	ft_printf("%u %s %s %d ", f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), f.st.st_size);
 
 	char *date;
-	date = ctime(&st.st_mtime);
+	date = ctime(&f.st.st_mtime);
 	write(1, date + 4, 12);
 	write(1, " ", 1);
 }
@@ -102,13 +129,13 @@ static void	longPrint(t_files f)
 {
 	write(1, "\n", 1);
 
-	print_permissions(f.data[0].st);
+	print_permissions(f.data[0]);
 	printName(f.data[0]);
 
 	for (size_t i = 1; i < f.size; i++)
 	{
 		write(1, "\n", 1);
-		print_permissions(f.data[i].st);
+		print_permissions(f.data[i]);
 		printName(f.data[i]);
 	}
 }

@@ -4,14 +4,14 @@
 #include "libft/libft.h"
 #include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
 #include <string.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <stdio.h>
+#include <time.h>
 #include <pwd.h>
 #include <grp.h>
-#include <time.h>
 
 #define FLAG_l			(1 << 0)  // 00000001
 #define FLAG_R			(1 << 1)  // 00000010

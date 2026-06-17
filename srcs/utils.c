@@ -63,12 +63,15 @@ char	cmp_alpha(t_file *a, t_file *b)
 
 char	cmp_time(t_file *a, t_file *b)
 {
-	if (a->st.st_mtime == b->st.st_mtime)
-	{
-		return (ft_strcmp(a->name, b->name) <= 0);
-	}
-	else
+	if (a->st.st_mtime != b->st.st_mtime)
 	{
 		return (a->st.st_mtime > b->st.st_mtime);
 	}
+	
+	if (a->st.st_mtim.tv_nsec != b->st.st_mtim.tv_nsec)
+	{
+		return (a->st.st_mtim.tv_nsec > b->st.st_mtim.tv_nsec);
+	}
+	
+	return (ft_strcmp(a->name, b->name) < 0);
 }

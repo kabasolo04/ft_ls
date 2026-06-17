@@ -18,7 +18,7 @@ static char	flagError(char* input)
 			case 'r': ADD_FLAG(g_flags, FLAG_r); break;
 			case 't': ADD_FLAG(g_flags, FLAG_t); break;
 			default:
-				return ft_printf("ls: invalid option -- '%c'\nTry 'ls --help' for more information.\n", input[i]), 1;
+				return ft_printf("ft_ls: invalid option -- '%c'\nTry 'ls --help' for more information.\n", input[i]), 1;
 		}
 	}
 	return 0;
