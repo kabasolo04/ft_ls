@@ -22,6 +22,7 @@
 #define MULTI_TARGET	(1 << 5)  // 00100000
 
 extern char	g_flags;
+extern char	g_exit;
 
 #define HAS_FLAG(flags, flag) ((flags & (flag)) != 0)
 #define ADD_FLAG(flags, flag) flags |= flag
@@ -39,6 +40,7 @@ typedef struct s_files
 	t_file*	data;
 	size_t	size;
 	size_t	capacity;
+	size_t	file_size;
 }
 t_files;
 

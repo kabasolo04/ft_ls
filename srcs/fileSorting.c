@@ -5,6 +5,7 @@ static void	files_init(t_files *f)
 	f->data = NULL;
 	f->size = 0;
 	f->capacity = 0;
+	f->file_size = 0;
 }
 
 void	free_files(t_files *f)
@@ -55,14 +56,21 @@ t_files	getFiles(DIR *dir, char *path)
 		if (entry->d_name[0] == '.' && !HAS_FLAG(g_flags, FLAG_a))	continue;
 	
 		file.name = ft_strdup(entry->d_name);
-		if (!file.name) { continue; ; }
+		if (!file.name) { continue;}
 		file.path = join_path(path, entry->d_name);
 		if (!file.path) { free(file.name); continue ;}
 
-		if (HAS_FLAG(g_flags, FLAG_l))
+		if (HAS_FLAG(g_flags, FLAG_l) || HAS_FLAG(g_flags, FLAG_R) || HAS_FLAG(g_flags, FLAG_t))
+		{
 			lstat(file.path, &file.st);
+		}
 		else
+		{
 			stat(file.path, &file.st);
+//			memset(&file.st, 0, sizeof(file.st));
+		}
+
+		files.file_size += file.st.st_blocks;
 
 		files_push(&files, file);
 	}

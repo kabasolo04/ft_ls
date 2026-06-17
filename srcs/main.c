@@ -1,6 +1,7 @@
 #include "ft_ls.h"
 
 char	g_flags = 0;
+char	g_exit = 0;
 
 static char	flagError(char* input)
 {
@@ -25,18 +26,27 @@ static char	flagError(char* input)
 
 static char	targetError(char* input)
 {
-	if (input[0] == '-' && input[1] != ' ')
-		return 1;
+	if (input[0] == '-' && input[1] != '\0')
+	{
+		return 0;
+	}
 
 	struct stat st;
 
+	static char	firstFlag = 1;
+
 	if (lstat(input, &st) == -1)
 	{
-		ft_printf("ft_ls: cannot access '%s': %s\n", input, strerror(errno));
-		return (1);
+		if (!firstFlag)
+			write(1, "\n", 1);
+
+		ft_printf("ft_ls: cannot access '%s': %s", input, strerror(errno));
+		g_exit = 2;
 	}
 
-	return (0);
+	firstFlag = 0;
+
+	return (1);
 }
 
 static t_files	list_directory(DIR *dir, char *input)
@@ -82,8 +92,10 @@ static void	displayInfo(char* input)
 	dir = opendir(input);
 	if (!dir)
 	{
-		if (HAS_FLAG(g_flags, FLAG_R)) ft_printf("\nft_ls: cannot open directory '%s': %s", input, strerror(errno));
+		ft_printf("\nft_ls: cannot open directory '%s': %s", input, strerror(errno));
 
+		if (g_exit < 2) g_exit = 2 - HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R);
+	
 		return ;
 	}
 
@@ -102,7 +114,6 @@ static void	displayInfo(char* input)
 
 int	main(int argc, char** argv)
 {
-	char	exitValue = 0;
 	size_t	targetNumber = 0;
 
 	for (int i = 1; i < argc; i++)
@@ -112,25 +123,20 @@ int	main(int argc, char** argv)
 
 	for (int i = 1; i < argc; i++)
 	{
-		if (targetError(argv[i]))
-			exitValue = 2;
-		else if (++targetNumber > 1)
+		targetNumber += targetError(argv[i]);
+	
+		if (targetNumber > 1)
 			ADD_FLAG(g_flags, MULTI_TARGET);
 	}
 
-	if (!targetNumber) return displayInfo("."), write(1, "\n", 1), exitValue;
+	if (!targetNumber) return displayInfo("."), write(1, "\n", 1), g_exit;
 
 	for (int i = 1; i < argc; i++)
 	{
 		displayInfo(argv[i]);
 	}
 
-//	if (!HAS_FLAG(g_flags, MULTI_TARGET) && !HAS_FLAG(g_flags, FLAG_R))
-//
-//	for (int i = 1; i < argc; i++)
-//	{
-//		showErrors(argv[i], g_flags);
-//	}
+	write(1, "\n", 1);
 
-	return write(1, "\n", 1), exitValue;
+	return g_exit;
 }
