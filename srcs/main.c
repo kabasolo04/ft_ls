@@ -85,7 +85,7 @@ static void	displayInfo(char* input)
 
 	struct stat st;
 
-	if (lstat(input, &st) == -1 || !S_ISDIR(st.st_mode)) return;
+	if (stat(input, &st) == -1 || !S_ISDIR(st.st_mode)) return;
 
 	DIR	*dir;
 

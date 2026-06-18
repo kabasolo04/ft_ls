@@ -60,6 +60,8 @@ t_files	getFiles(DIR *dir, char *path)
 		file.path = join_path(path, entry->d_name);
 		if (!file.path) { free(file.name); continue ;}
 
+		file.name_len = ft_strlen(file.name);
+
 		if (HAS_FLAG(g_flags, FLAG_l) || HAS_FLAG(g_flags, FLAG_R) || HAS_FLAG(g_flags, FLAG_t))
 		{
 			lstat(file.path, &file.st);

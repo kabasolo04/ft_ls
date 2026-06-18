@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 #include <time.h>
 #include <pwd.h>
 #include <grp.h>
@@ -30,6 +31,7 @@ extern char	g_exit;
 typedef struct s_file
 {
 	char*		name;
+	size_t		name_len;
 	char*		path;
 	struct stat	st;
 }
