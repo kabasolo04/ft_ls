@@ -14,6 +14,17 @@
 #include <pwd.h>
 #include <grp.h>
 
+#define RESET	"\033[0m"
+#define BLUE	"\033[34m"
+#define CYAN	"\033[36m"
+#define GREEN	"\033[32m"
+#define MAGENTA	"\033[35m"
+#define YELLOW	"\033[33m"
+#define RED		"\033[31m"
+
+#define RED_BG	"\033[41m"
+#define WHITE	"\033[97m"
+
 #define FLAG_l			(1 << 0)  // 00000001
 #define FLAG_R			(1 << 1)  // 00000010
 #define FLAG_a			(1 << 2)  // 00000100
@@ -46,17 +57,21 @@ typedef struct s_files
 }
 t_files;
 
-typedef char (*t_cmp)(t_file *, t_file *);
+typedef	char (*t_cmp)(t_file *, t_file *);
+void	merge_sort(t_files *f, int l, int r, t_cmp cmp);
 
 t_files	getFiles(DIR *dir, char *path);
-void	merge_sort(t_files *f, int l, int r, t_cmp cmp);
-void	printFiles(t_files f, char *input);
 void	free_files(t_files *f);
 
 char	*join_path(const char *dir, const char *name);
 char	cmp_alpha(t_file *a, t_file *b);
 char	cmp_time(t_file *a, t_file *b);
+void	printName(t_file data);
 
-void	printFiles(t_files f, char *input);
+char	flagError(char* input);
+char	targetError(char* input);
+
+void	normalPrint(t_files files);
+void	longPrint(t_files files);
 
 #endif //FT_LS.H

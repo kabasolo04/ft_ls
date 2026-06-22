@@ -62,15 +62,7 @@ t_files	getFiles(DIR *dir, char *path)
 
 		file.name_len = ft_strlen(file.name);
 
-		if (HAS_FLAG(g_flags, FLAG_l) || HAS_FLAG(g_flags, FLAG_R) || HAS_FLAG(g_flags, FLAG_t))
-		{
-			lstat(file.path, &file.st);
-		}
-		else
-		{
-			stat(file.path, &file.st);
-//			memset(&file.st, 0, sizeof(file.st));
-		}
+		lstat(file.path, &file.st);
 
 		files.file_size += file.st.st_blocks;
 
