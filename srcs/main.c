@@ -19,24 +19,6 @@ static t_files	list_directory(DIR *dir, char *input)
 	return	files;
 }
 
-static void	displayInfo(char* input);
-
-static void	handleRecursive(t_files	files)
-{
-	if (files.size == 0) return;
-
-	if (!HAS_FLAG(g_flags, FLAG_R)) return ;
-
-	for (size_t i = 0; i < files.size; i++)
-	{
-		if (ft_strncmp(files.data[i].name, ".", 2) == 0) continue;
-	
-		if (ft_strncmp(files.data[i].name, "..", 3) == 0) continue;
-
-		if (S_ISDIR(files.data[i].st.st_mode)) displayInfo(files.data[i].path);
-	}
-}
-
 static void	printFiles(t_files files, char *input)
 {
 	static char		first = 1;
@@ -55,6 +37,24 @@ static void	printFiles(t_files files, char *input)
 		longPrint(files);
 	else
 		normalPrint(files);
+}
+
+static void	displayInfo(char* input);
+
+static void	handleRecursive(t_files	files)
+{
+	if (files.size == 0) return;
+
+	if (!HAS_FLAG(g_flags, FLAG_R)) return ;
+
+	for (size_t i = 0; i < files.size; i++)
+	{
+		if (ft_strncmp(files.data[i].name, ".", 2) == 0) continue;
+	
+		if (ft_strncmp(files.data[i].name, "..", 3) == 0) continue;
+
+		if (S_ISDIR(files.data[i].st.st_mode)) displayInfo(files.data[i].path);
+	}
 }
 
 static void	displayInfo(char* input)
