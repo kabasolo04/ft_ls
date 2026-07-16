@@ -61,20 +61,19 @@ static char	file_tipe(mode_t mode)
 {
 	if (S_ISREG(mode))
 		return ('-');
-	else if (S_ISDIR(mode))
+	if (S_ISDIR(mode))
 		return ('d');
-	else if (S_ISLNK(mode))
+	if (S_ISLNK(mode))
 		return ('l');
-	else if (S_ISBLK(mode))
+	if (S_ISBLK(mode))
 		return ('b');
-	else if (S_ISCHR(mode))
+	if (S_ISCHR(mode))
 		return ('c');
-	else if (S_ISSOCK(mode))
+	if (S_ISSOCK(mode))
 		return ('s');
-	else if (S_ISFIFO(mode))
+	if (S_ISFIFO(mode))
 		return ('p');
-	else
-		return ('-');
+	return ('-');
 }
 
 static void	print_permissions(t_file f)

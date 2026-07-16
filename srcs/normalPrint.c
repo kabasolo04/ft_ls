@@ -5,6 +5,7 @@ typedef struct s_layout
 	size_t	cols;
 	size_t	rows;
 	size_t	*widths;
+
 }	t_layout;
 
 static void print_padded(size_t len, size_t width)

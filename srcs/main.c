@@ -34,9 +34,13 @@ static void	printFiles(t_files files, char *input)
 	}
 
 	if (HAS_FLAG(g_flags, FLAG_l))
+	{
 		longPrint(files);
+	}
 	else
+	{
 		normalPrint(files);
+	}
 }
 
 static void	displayInfo(char* input);
@@ -59,23 +63,23 @@ static void	handleRecursive(t_files	files)
 
 static void	displayInfo(char* input)
 {
-	struct stat st;
+	struct stat	st;
+	DIR*		dir;
+	t_files		files;
 
 	if (stat(input, &st) == -1 || !S_ISDIR(st.st_mode)) return;
 
-	DIR	*dir;
-
 	dir = opendir(input);
+
 	if (!dir)
 	{
 		ft_printf("\nft_ls: cannot open directory '%s': %s", input, strerror(errno));
 
-		if (g_exit < 2) g_exit = 2 - HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R);
+		if (g_exit < 2)
+			g_exit = 2 - HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R); // in MULTI_TARGET or FLAG_R the error code is 1 instead of 2
 	
 		return ;
 	}
-
-	t_files	files;
 
 	files = list_directory(dir, input);
 
@@ -98,20 +102,17 @@ int	main(int argc, char** argv)
 	for (int i = 1; i < argc; i++)
 	{
 		targetNumber += targetError(argv[i]);
-	
-		if (targetNumber > 1)
-			ADD_FLAG(g_flags, MULTI_TARGET);
 	}
 
 	if (targetNumber == 0)
-		displayInfo(".");
-	else
+		return displayInfo("."), write(1, "\n", 1), g_exit;
+
+	ADD_FLAG(g_flags, MULTI_TARGET * (targetNumber > 1));
+	
+	for (int i = 1; i < argc; i++)
 	{
-		for (int i = 1; i < argc; i++)
-		{
-			if (argv[i][0] != '-' || argv[i][1] == ' ')
-				displayInfo(argv[i]);
-		}
+		if (argv[i][0] != '-' || argv[i][1] == ' ')
+			displayInfo(argv[i]);
 	}
 
 	return write(1, "\n", 1), g_exit;
