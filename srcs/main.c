@@ -5,35 +5,40 @@ char	g_exit = 0;
 
 static t_files	list_directory(DIR *dir, char *input)
 {
-	t_files			files;
+	t_files	files;
 
 	files = getFiles(dir, input);
 
 	closedir(dir);
 
 	if (HAS_FLAG(g_flags, FLAG_t))
+	{
 		merge_sort(&files, 0, files.size - 1, cmp_time);
+	}
+	else if (HAS_FLAG(g_flags, FLAG_S))
+	{
+		merge_sort(&files, 0, files.size - 1, cmp_size);
+	}
 	else
+	{
 		merge_sort(&files, 0, files.size - 1, cmp_alpha);
+	}
 
 	return	files;
 }
 
 static void	printFiles(t_files files, char *input)
 {
-	static char		first = 1;
+	static char	first = 1;
 
 	if (!first)
 		write(1, "\n\n", 2);
 
 	first = 0;
 
-	if (HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R))
-	{
-		ft_printf("%s:", input);
-	}
+	if (HAS_FLAG(g_flags, MULTI_TARGET)) ft_printf("%s:", input);
 
-	if (HAS_FLAG(g_flags, FLAG_l))
+	if (HAS_FLAG(g_flags, LONG_PRINT))
 	{
 		longPrint(files);
 	}
@@ -76,7 +81,7 @@ static void	displayInfo(char* input)
 		ft_printf("\nft_ls: cannot open directory '%s': %s", input, strerror(errno));
 
 		if (g_exit < 2)
-			g_exit = 2 - HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R); // in MULTI_TARGET or FLAG_R the error code is 1 instead of 2
+			g_exit = 2 - HAS_FLAG(g_flags, MULTI_TARGET); // in MULTI_TARGET the error code is 1 instead of 2
 	
 		return ;
 	}
@@ -107,12 +112,11 @@ int	main(int argc, char** argv)
 	if (targetNumber == 0)
 		return displayInfo("."), write(1, "\n", 1), g_exit;
 
-	ADD_FLAG(g_flags, MULTI_TARGET * (targetNumber > 1));
+	ADD_FLAG(g_flags, MULTI * (targetNumber > 1));
 	
 	for (int i = 1; i < argc; i++)
 	{
-		if (argv[i][0] != '-' || argv[i][1] == ' ')
-			displayInfo(argv[i]);
+		if (argv[i][0] != '-' || argv[i][1] == ' ') displayInfo(argv[i]);
 	}
 
 	return write(1, "\n", 1), g_exit;

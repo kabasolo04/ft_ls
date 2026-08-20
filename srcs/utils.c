@@ -24,6 +24,26 @@ char	*join_path(const char *dir, const char *name)
 	return (path);
 }
 
+char	cmp_time(t_file *a, t_file *b)
+{
+	if (a->st.st_mtime != b->st.st_mtime)
+	{
+		return (a->st.st_mtime > b->st.st_mtime);
+	}
+	
+	if (a->st.st_mtim.tv_nsec != b->st.st_mtim.tv_nsec)
+	{
+		return (a->st.st_mtim.tv_nsec > b->st.st_mtim.tv_nsec);
+	}
+	
+	return (ft_strcmp(a->name, b->name) < 0);
+}
+
+char	cmp_size(t_file *a, t_file *b)
+{
+	return (a->st.st_size > b->st.st_size);
+}
+
 char	cmp_alpha(t_file *a, t_file *b)
 {
 	int	i;
@@ -42,21 +62,6 @@ char	cmp_alpha(t_file *a, t_file *b)
 		i++;
 	}
 	return (a->name[i] == '\0');
-}
-
-char	cmp_time(t_file *a, t_file *b)
-{
-	if (a->st.st_mtime != b->st.st_mtime)
-	{
-		return (a->st.st_mtime > b->st.st_mtime);
-	}
-	
-	if (a->st.st_mtim.tv_nsec != b->st.st_mtim.tv_nsec)
-	{
-		return (a->st.st_mtim.tv_nsec > b->st.st_mtim.tv_nsec);
-	}
-	
-	return (ft_strcmp(a->name, b->name) < 0);
 }
 
 static int	is_compressed_file(const char *name)

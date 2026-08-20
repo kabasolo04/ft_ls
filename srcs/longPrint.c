@@ -94,11 +94,13 @@ static void	print_permissions(t_file f)
 	buf[idx++] = (f.st.st_mode & S_IXOTH) ? 'x' : '-';
 
 	buf[idx++] = get_attr_indicator(f.path);
-	buf[idx++] = ' ';
-	
-	write(1, buf, idx);
+	buf[idx]   = '\0';
 
-	ft_printf("%u %s %s %d ", f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), f.st.st_size);
+
+	if (HAS_FLAG(g_flags, FLAG_g))
+		ft_printf("%s %u %s %d ",buf, f.st.st_nlink, get_group_cached(f.st.st_gid), f.st.st_size);
+	else
+		ft_printf("%s %u %s %s %d ",buf, f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), f.st.st_size);
 
 	char *date;
 	date = ctime(&f.st.st_mtime);

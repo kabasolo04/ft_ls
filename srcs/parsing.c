@@ -2,22 +2,25 @@
 
 char	flagError(char* input)
 {
-	if (input[0] != '-')
-		return 0;
+	if (input[0] != '-') return 0;
 
 	for (size_t i = 1; input[i]; i++)
 	{
 		switch (input[i])
 		{
 			case 'l': ADD_FLAG(g_flags, FLAG_l); break;
-			case 'R': ADD_FLAG(g_flags, FLAG_R); break;
+			case 'g': ADD_FLAG(g_flags, FLAG_g); break;
 			case 'a': ADD_FLAG(g_flags, FLAG_a); break;
 			case 'r': ADD_FLAG(g_flags, FLAG_r); break;
 			case 't': ADD_FLAG(g_flags, FLAG_t); break;
+			case 'S': ADD_FLAG(g_flags, FLAG_S); break;
+			case 'R': ADD_FLAG(g_flags, FLAG_R); break;
+		
 			default:
 				return ft_printf("ft_ls: invalid option -- '%c'\nTry 'ls --help' for more information.\n", input[i]), 1;
 		}
 	}
+
 	return 0;
 }
 

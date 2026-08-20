@@ -26,12 +26,16 @@
 #define WHITE	"\033[97m"
 
 #define FLAG_l			(1 << 0)  // 00000001
-#define FLAG_R			(1 << 1)  // 00000010
+#define FLAG_g			(1 << 1)  // 00000010
 #define FLAG_a			(1 << 2)  // 00000100
 #define FLAG_r			(1 << 3)  // 00001000
 #define FLAG_t			(1 << 4)  // 00010000
+#define FLAG_S			(1 << 5)  // 00100000
+#define FLAG_R			(1 << 6)  // 01000000
+#define MULTI			(1 << 7)  // 01000000
 
-#define MULTI_TARGET	(1 << 5)  // 00100000
+#define MULTI_TARGET	(MULTI  | FLAG_R)	// 11000000
+#define LONG_PRINT		(FLAG_l | FLAG_g)	// 00000011
 
 extern char	g_flags;
 extern char	g_exit;
@@ -64,8 +68,9 @@ t_files	getFiles(DIR *dir, char *path);
 void	free_files(t_files *f);
 
 char	*join_path(const char *dir, const char *name);
-char	cmp_alpha(t_file *a, t_file *b);
 char	cmp_time(t_file *a, t_file *b);
+char	cmp_size(t_file *a, t_file *b);
+char	cmp_alpha(t_file *a, t_file *b);
 void	printName(t_file data);
 
 char	flagError(char* input);
