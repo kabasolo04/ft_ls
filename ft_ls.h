@@ -25,10 +25,13 @@
 #define RED_BG	"\033[41m"
 #define WHITE	"\033[97m"
 
-#define FLAG_l			(1 << 0)	// ...0001
-#define FLAG_g			(1 << 1)	// ...0010
-#define FLAG_G			(1 << 2)	// ...0100
-#define FLAG_a			(1 << 3)	//   ...
+#define TRUE			(~0)		// 111...111
+#define FALSE			0			// 000...000
+
+#define FLAG_l			(1 << 0)	// ...001
+#define FLAG_g			(1 << 1)	// ...010
+#define FLAG_G			(1 << 2)	// ...100
+#define FLAG_a			(1 << 3)	// ...
 #define FLAG_r			(1 << 4)
 #define FLAG_t			(1 << 5)
 #define FLAG_S			(1 << 6)

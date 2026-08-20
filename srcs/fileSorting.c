@@ -60,9 +60,7 @@ t_files	getFiles(DIR *dir, char *path)
 		if (!file.path) { free(file.name); continue ;}
 
 		file.name_len = ft_strlen(file.name);
-
 		lstat(file.path, &file.st);
-
 		files.file_size += file.st.st_blocks;
 
 		files_push(&files, file);
@@ -105,8 +103,7 @@ static void	merge(t_files *f, t_file *temp, int l, int m, int r, t_cmp cmp)
 
 static void	merge_sort_helper(t_files *f, t_file *temp, int l, int r, t_cmp cmp)
 {
-	if (l >= r)
-		return;
+	if (l >= r) return;
 
 	int m = (l + r) / 2;
 
@@ -117,13 +114,13 @@ static void	merge_sort_helper(t_files *f, t_file *temp, int l, int r, t_cmp cmp)
 
 void	merge_sort(t_files *f, int l, int r, t_cmp cmp)
 {
-	if (l >= r || f->size == 0)
-		return;
+	if (l >= r || f->size == 0) return;
 
 	t_file *temp = malloc(sizeof(t_file) * f->size);
-	if (!temp)
-		return;
+
+	if (!temp) return;
 
 	merge_sort_helper(f, temp, l, r, cmp);
+
 	free(temp);
 }

@@ -112,6 +112,7 @@ static t_layout calculate_layout(t_files files, size_t term_width)
 	layout.cols = 1;
 	layout.rows = files.size;
 	layout.widths = widths;
+
 	return layout;
 }
 
@@ -122,10 +123,7 @@ void	normalPrint(t_files files)
 
 	if (files.size == 0) return;
 
-	if (HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R))
-	{
-		write(1, "\n", 1);
-	}
+	if (HAS_FLAG(g_flags, MULTI_TARGET)) write(1, "\n", 1);
 
 	if (term_width == 0)
 	{
@@ -135,5 +133,6 @@ void	normalPrint(t_files files)
 	}
 
 	layout = calculate_layout(files, term_width);
+
 	print_columns(files, layout);
 }

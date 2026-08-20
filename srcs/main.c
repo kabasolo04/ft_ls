@@ -3,6 +3,28 @@
 int		g_flags = 0;
 char	g_exit = 0;
 
+static t_cmp	get_comparator(void)
+{
+	static const struct
+	{
+		int		flag;
+		t_cmp	cmp;
+	}
+	sorts[] =
+	{
+		{FLAG_U, cmp_nothing},
+		{FLAG_t, cmp_time},
+		{FLAG_S, cmp_size},
+	};
+
+	for (size_t i = 0; i < sizeof(sorts) / sizeof(sorts[0]); i++)
+	{
+		if (HAS_FLAG(g_flags, sorts[i].flag)) return (sorts[i].cmp);
+	}
+
+	return (cmp_alpha);
+}
+
 static t_files	list_directory(DIR *dir, char *input)
 {
 	t_files	files;
@@ -11,24 +33,7 @@ static t_files	list_directory(DIR *dir, char *input)
 
 	closedir(dir);
 
-
-
-	if (HAS_FLAG(g_flags, FLAG_U))
-	{
-		merge_sort(&files, 0, files.size - 1, cmp_nothing);
-	}
-	else if (HAS_FLAG(g_flags, FLAG_t))
-	{
-		merge_sort(&files, 0, files.size - 1, cmp_time);
-	}
-	else if (HAS_FLAG(g_flags, FLAG_S))
-	{
-		merge_sort(&files, 0, files.size - 1, cmp_size);
-	}
-	else
-	{
-		merge_sort(&files, 0, files.size - 1, cmp_alpha);
-	}
+	merge_sort(&files, 0, files.size - 1, get_comparator());
 
 	return	files;
 }

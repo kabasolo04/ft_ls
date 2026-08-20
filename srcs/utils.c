@@ -10,14 +10,17 @@ char	*join_path(const char *dir, const char *name)
 	len_name = ft_strlen(name);
 
 	while (len_dir >= 1 && dir[len_dir - 1] == '/')
-		len_dir--;
+	{
+		len_dir --;
+	}
 
 	path = malloc(len_dir + 1 + len_name + 1);
-	if (!path)
-		return (NULL);
+
+	if (!path) return (NULL);
 
 	ft_memcpy(path, dir, len_dir);
 	path[len_dir] = '/';
+
 	ft_memcpy(path + len_dir + 1, name, len_name);
 	path[len_dir + 1 + len_name] = '\0';
 
@@ -138,6 +141,7 @@ void	printName(t_file data)
 	if (HAS_FLAG(g_flags, FLAG_l) && S_ISLNK(data.st.st_mode))
 	{
 		len = readlink(data.path, buf, sizeof(buf) - 1);
+
 		if (len >= 0)
 		{
 			buf[len] = '\0';

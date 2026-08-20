@@ -37,12 +37,14 @@ static char *get_user_cached(uid_t uid)
 	}
 
 	struct passwd *pw = getpwuid(uid);
+
 	if (g_uid_cache_count < CACHE_SIZE)
 	{
 		g_uid_cache[g_uid_cache_count].uid = uid;
 		g_uid_cache[g_uid_cache_count].name = pw ? ft_strdup(pw->pw_name) : ft_strdup("nobody");
 		g_uid_cache_count++;
 	}
+
 	return pw ? pw->pw_name : "nobody";
 }
 
@@ -62,6 +64,7 @@ static char *get_group_cached(gid_t gid)
 		g_gid_cache[g_gid_cache_count].name = gr ? ft_strdup(gr->gr_name) : ft_strdup("nogroup");
 		g_gid_cache_count++;
 	}
+
 	return gr ? gr->gr_name : "nogroup";
 }
 

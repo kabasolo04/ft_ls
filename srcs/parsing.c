@@ -28,14 +28,10 @@ char	flagError(char* input)
 
 char	targetError(char* input)
 {
-	if (input[0] == '-' && input[1] != '\0')
-	{
-		return 0;
-	}
-
-	struct stat st;
-
+	struct stat	st;
 	static char	firstFlag = 1;
+
+	if (input[0] == '-' && input[1] != '\0') return 0;
 
 	if (lstat(input, &st) == -1)
 	{
@@ -48,5 +44,5 @@ char	targetError(char* input)
 
 	firstFlag = 0;
 
-	return (1);
+	return 1;
 }
