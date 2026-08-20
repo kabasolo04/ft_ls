@@ -19,7 +19,7 @@ char	flagError(char* input)
 			case 'U': ADD_FLAG(g_flags, FLAG_U); break;
 		
 			default:
-				return ft_printf("ft_ls: invalid option -- '%c'\nTry 'ls --help' for more information.\n", input[i]), 1;
+				return ft_printf("ft_ls: invalid option -- '%c'\nOpen README.md in the root of this repo for more information.\n", input[i]), 1;
 		}
 	}
 
