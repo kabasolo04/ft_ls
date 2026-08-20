@@ -81,5 +81,6 @@ char	targetError(char* input);
 
 void	normalPrint(t_files files);
 void	longPrint(t_files files);
+void	free_cache();
 
 #endif //FT_LS.H

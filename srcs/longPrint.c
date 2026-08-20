@@ -15,6 +15,19 @@ static struct {
 static unsigned g_uid_cache_count = 0;
 static unsigned g_gid_cache_count = 0;
 
+void free_cache()
+{
+	for (unsigned i = 0; i < g_uid_cache_count; i++)
+	{
+		free(g_uid_cache[i].name);
+	}
+
+	for (unsigned i = 0; i < g_gid_cache_count; i++)
+	{
+		free(g_gid_cache[i].name);
+	}
+}
+
 static char *get_user_cached(uid_t uid)
 {
 	for (unsigned i = 0; i < g_uid_cache_count; i++)
@@ -27,7 +40,7 @@ static char *get_user_cached(uid_t uid)
 	if (g_uid_cache_count < CACHE_SIZE)
 	{
 		g_uid_cache[g_uid_cache_count].uid = uid;
-		g_uid_cache[g_uid_cache_count].name = pw ? pw->pw_name : "nobody";
+		g_uid_cache[g_uid_cache_count].name = pw ? ft_strdup(pw->pw_name) : ft_strdup("nobody");
 		g_uid_cache_count++;
 	}
 	return pw ? pw->pw_name : "nobody";
@@ -42,10 +55,11 @@ static char *get_group_cached(gid_t gid)
 	}
 
 	struct group *gr = getgrgid(gid);
+
 	if (g_gid_cache_count < CACHE_SIZE)
 	{
 		g_gid_cache[g_gid_cache_count].gid = gid;
-		g_gid_cache[g_gid_cache_count].name = gr ? gr->gr_name : "nogroup";
+		g_gid_cache[g_gid_cache_count].name = gr ? ft_strdup(gr->gr_name) : ft_strdup("nogroup");
 		g_gid_cache_count++;
 	}
 	return gr ? gr->gr_name : "nogroup";
@@ -89,7 +103,6 @@ static void	print_permissions(t_file f)
 	buf[idx++] = '.';
 	buf[idx]   = '\0';
 
-
 	if (HAS_FLAG(g_flags, FLAG_g))
 		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_group_cached(f.st.st_gid), (long)f.st.st_size);
 	else if (HAS_FLAG(g_flags, FLAG_G))
@@ -105,10 +118,7 @@ static void	print_permissions(t_file f)
 
 void	longPrint(t_files files)
 {
-	if (HAS_FLAG(g_flags, MULTI_TARGET) || HAS_FLAG(g_flags, FLAG_R))
-	{
-		write(1, "\n", 1);
-	}
+	if (HAS_FLAG(g_flags, MULTI_TARGET)) write(1, "\n", 1);
 
 	ft_printf("total %u", files.file_size / 2);
 

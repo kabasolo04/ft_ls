@@ -11,7 +11,7 @@ static t_files	list_directory(DIR *dir, char *input)
 
 	closedir(dir);
 
-	
+
 
 	if (HAS_FLAG(g_flags, FLAG_U))
 	{
@@ -116,7 +116,7 @@ int	main(int argc, char** argv)
 	}
 
 	if (targetNumber == 0)
-		return displayInfo("."), write(1, "\n", 1), g_exit;
+		return displayInfo("."), write(1, "\n", 1), free_cache(), g_exit;
 
 	ADD_FLAG(g_flags, MULTI * (targetNumber > 1));
 	
@@ -125,5 +125,5 @@ int	main(int argc, char** argv)
 		if (argv[i][0] != '-' || argv[i][1] == ' ') displayInfo(argv[i]);
 	}
 
-	return write(1, "\n", 1), g_exit;
+	return write(1, "\n", 1), free_cache(), g_exit;
 }
