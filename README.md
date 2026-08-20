@@ -1,3 +1,5 @@
+*This project has been created as part of the 42 curriculum by kabasolo.*
+
 # ft_ls
 
 > A recreation of the Unix `ls` command, developed as part of the 42 curriculum.
