@@ -8,19 +8,21 @@ typedef struct s_layout
 
 }	t_layout;
 
-static void print_padded(size_t len, size_t width)
+static void	print_padded(size_t len, size_t width)
 {
-	size_t i;
+	char	tmp[1024];
+	size_t	i;
+	size_t	padding;
 
-	if (width > len)
-	{
-		i = 0;
-		while (i < (width - len))
-		{
-			write(1, " ", 1);
-			i++;
-		}
-	}
+	if (width <= len) return;
+
+	padding = width - len;
+	i = 0;
+
+	while (i < padding)
+		tmp[i++] = ' ';
+	
+	write(1, tmp, padding);
 }
 
 void	print_columns(t_files files, t_layout layout)

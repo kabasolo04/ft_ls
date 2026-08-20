@@ -53,10 +53,9 @@ t_files	getFiles(DIR *dir, char *path)
 
 	while ((entry = readdir(dir)))
 	{
-		if (entry->d_name[0] == '.' && !HAS_FLAG(g_flags, FLAG_a))	continue;
-	
+		if (entry->d_name[0] == '.' && !HAS_FLAG(g_flags, FLAG_a)) continue;
 		file.name = ft_strdup(entry->d_name);
-		if (!file.name) { continue;}
+		if (!file.name) continue;
 		file.path = join_path(path, entry->d_name);
 		if (!file.path) { free(file.name); continue ;}
 
