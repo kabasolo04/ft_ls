@@ -21,12 +21,17 @@ This project focuses on:
 Implemented options:
 
 - `-l` : long format listing
-- `-g` : like -l, but it does not list owner
 - `-R` : recursive listing
 - `-a` : show hidden files
 - `-r` : reverse sorting order
 - `-t` : sort by modification time
+
+Extra options:
+
+- `-g` : like -l, but it does not list owner
+- `-G` : like -l, but it does not list group
 - `-S` : sort by size
+- `-U` : do not sort directory entries
 
 Examples:
 

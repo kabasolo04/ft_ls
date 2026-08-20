@@ -44,6 +44,14 @@ char	cmp_size(t_file *a, t_file *b)
 	return (a->st.st_size > b->st.st_size);
 }
 
+char	cmp_nothing(t_file *a, t_file *b)
+{
+	(void)a;
+	(void)b;
+
+	return 1;
+}
+
 char	cmp_alpha(t_file *a, t_file *b)
 {
 	int	i;
@@ -54,14 +62,17 @@ char	cmp_alpha(t_file *a, t_file *b)
 	{
 		ca = ft_tolower(a->name[i]);
 		cb = ft_tolower(b->name[i]);
+
 		if (ca != cb)
 			return (ca < cb);
 
 		if (a->name[i] != b->name[i])
 			return ((unsigned char)a->name[i] < (unsigned char)b->name[i]);
+
 		i++;
 	}
-	return (a->name[i] == '\0');
+
+	return a->name[i] == '\0';
 }
 
 static int	is_compressed_file(const char *name)
@@ -84,38 +95,34 @@ static int	is_compressed_file(const char *name)
 	};
 
 	dot = ft_strrchr(name, '.');
-	if (!dot || dot == name)
-		return (0);
+
+	if (!dot || dot == name) return 0;
 
 	for (int i = 0; extensions[i]; i ++)
 	{
-		if (ft_strcmp(dot, extensions[i]) == 0)
-			return (1);
+		if (ft_strcmp(dot, extensions[i]) == 0) return 1;
 	}
 
-	return (0);
+	return 0;
 }
 
 static const char	*getColor(const mode_t mode, const char *name)
 {
-	if (S_ISDIR(mode))
-		return (BLUE);
-	if (S_ISLNK(mode))
-		return (RED);
-	if (S_ISFIFO(mode))
-		return (YELLOW);
-	if (S_ISSOCK(mode))
-		return (MAGENTA);
-	if (S_ISBLK(mode) || S_ISCHR(mode))
-		return (YELLOW);
+	if (S_ISDIR(mode))	return BLUE;
+	if (S_ISLNK(mode))	return RED;
+	if (S_ISFIFO(mode))	return YELLOW;
+	if (S_ISSOCK(mode))	return MAGENTA;
+
+	if (S_ISBLK(mode) || S_ISCHR(mode))	return YELLOW;
+
 	if (S_ISREG(mode))
 	{
-		if (is_compressed_file(name))
-			return (RED);
-		if ((mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
-			return (GREEN);
+		if (is_compressed_file(name))	return RED;
+
+		if ((mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)	return GREEN;
 	}
-	return (RESET);
+
+	return RESET;
 }
 
 void	printName(t_file data)

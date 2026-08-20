@@ -10,11 +10,13 @@ char	flagError(char* input)
 		{
 			case 'l': ADD_FLAG(g_flags, FLAG_l); break;
 			case 'g': ADD_FLAG(g_flags, FLAG_g); break;
+			case 'G': ADD_FLAG(g_flags, FLAG_G); break;
 			case 'a': ADD_FLAG(g_flags, FLAG_a); break;
 			case 'r': ADD_FLAG(g_flags, FLAG_r); break;
 			case 't': ADD_FLAG(g_flags, FLAG_t); break;
 			case 'S': ADD_FLAG(g_flags, FLAG_S); break;
 			case 'R': ADD_FLAG(g_flags, FLAG_R); break;
+			case 'U': ADD_FLAG(g_flags, FLAG_U); break;
 		
 			default:
 				return ft_printf("ft_ls: invalid option -- '%c'\nTry 'ls --help' for more information.\n", input[i]), 1;

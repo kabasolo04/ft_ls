@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-char	g_flags = 0;
+int		g_flags = 0;
 char	g_exit = 0;
 
 static t_files	list_directory(DIR *dir, char *input)
@@ -11,7 +11,13 @@ static t_files	list_directory(DIR *dir, char *input)
 
 	closedir(dir);
 
-	if (HAS_FLAG(g_flags, FLAG_t))
+	
+
+	if (HAS_FLAG(g_flags, FLAG_U))
+	{
+		merge_sort(&files, 0, files.size - 1, cmp_nothing);
+	}
+	else if (HAS_FLAG(g_flags, FLAG_t))
 	{
 		merge_sort(&files, 0, files.size - 1, cmp_time);
 	}

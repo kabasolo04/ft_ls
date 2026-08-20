@@ -51,12 +51,6 @@ static char *get_group_cached(gid_t gid)
 	return gr ? gr->gr_name : "nogroup";
 }
 
-static char get_attr_indicator(const char *path) // Under Construction
-{
-	(void)path;
-	return '.';
-}
-
 static char	file_tipe(mode_t mode)
 {
 	if (S_ISREG(mode))
@@ -78,7 +72,7 @@ static char	file_tipe(mode_t mode)
 
 static void	print_permissions(t_file f)
 {
-	char buf[20];
+	char buf[12];
 	int idx = 0;
 
 	buf[idx++] = file_tipe(f.st.st_mode);
@@ -92,15 +86,16 @@ static void	print_permissions(t_file f)
 	buf[idx++] = (f.st.st_mode & S_IROTH) ? 'r' : '-';
 	buf[idx++] = (f.st.st_mode & S_IWOTH) ? 'w' : '-';
 	buf[idx++] = (f.st.st_mode & S_IXOTH) ? 'x' : '-';
-
-	buf[idx++] = get_attr_indicator(f.path);
+	buf[idx++] = '.';
 	buf[idx]   = '\0';
 
 
 	if (HAS_FLAG(g_flags, FLAG_g))
-		ft_printf("%s %u %s %d ",buf, f.st.st_nlink, get_group_cached(f.st.st_gid), f.st.st_size);
+		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_group_cached(f.st.st_gid), (long)f.st.st_size);
+	else if (HAS_FLAG(g_flags, FLAG_G))
+		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_user_cached(f.st.st_uid), (long)f.st.st_size);
 	else
-		ft_printf("%s %u %s %s %d ",buf, f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), f.st.st_size);
+		ft_printf("%s %u %s %s %d ", buf, f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), (long)f.st.st_size);
 
 	char *date;
 	date = ctime(&f.st.st_mtime);
