@@ -105,7 +105,7 @@ static int	is_compressed_file(const char *name)
 	{
 		if (ft_strcmp(dot, extensions[i]) == 0) return 1;
 	}
-
+	
 	return 0;
 }
 

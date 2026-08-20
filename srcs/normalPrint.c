@@ -20,100 +20,113 @@ static void	print_padded(size_t len, size_t width)
 	i = 0;
 
 	while (i < padding)
+	{
 		tmp[i++] = ' ';
+	}
 	
 	write(1, tmp, padding);
 }
 
 void	print_columns(t_files files, t_layout layout)
 {
-	size_t	row;
-	size_t	col;
 	size_t	i;
 
-	row = 0;
-	while (row < layout.rows)
+	for (size_t	row = 0; row < layout.rows; row++)
 	{
-		if (row != 0)
-			write(1, "\n", 1);
-		col = 0;
-		while (col < layout.cols)
+		if (row != 0) write(1, "\n", 1);
+
+		for (size_t	col = 0; col < layout.cols; col++)
 		{
 			i = row + col * layout.rows;
-			if (i < files.size)
-			{
-				printName(files.data[i]);
-				if (col != layout.cols - 1)
-					print_padded(files.data[i].name_len, layout.widths[col] + 2);
-			}
-			col++;
+		
+			if (i >= files.size) continue;
+		
+			printName(files.data[i]);
+	
+			if (col != layout.cols - 1)
+				print_padded(files.data[i].name_len, layout.widths[col] + 2);
 		}
-		row++;
 	}
 }
 
-static t_layout calculate_layout(t_files files, size_t term_width)
+static size_t	get_column_width(t_files files, size_t col, size_t rows)
 {
-	t_layout layout;
-	size_t cols;
-	size_t rows;
-	size_t col;
-	size_t i;
-	size_t total_width;
+	size_t	start;
+	size_t	end;
+	size_t	width;
 
-	static size_t *widths = NULL;
-	static size_t cap = 0;
+	start	= col * rows;
+	end		= start + rows;
+	width	= 0;
 
-	cols = files.size;
+	if (end > files.size)
+		end = files.size;
+
+	while (start < end)
+	{
+		if (files.data[start].name_len > width)
+			width = files.data[start].name_len;
+		start++;
+	}
+
+	return width;
+}
+
+static size_t	get_total_width(size_t *widths, size_t cols)
+{
+	size_t	total;
+	size_t	i;
+
+	total = 0;
+	i = 0;
+
+	while (i < cols)
+	{
+		total += widths[i] + 2;
+		i++;
+	}
+
+	return total - 2;
+}
+
+static t_layout	calculate_layout(t_files files, size_t term_width)
+{
+	static size_t	*widths;
+	static size_t	capacity;
+	t_layout		layout;
+	size_t			cols;
+	size_t			rows;
+
+	cols = files.size; 
 
 	while (cols > 0)
 	{
 		rows = (files.size + cols - 1) / cols;
 
-		if (cap < cols)
+		if (capacity < cols)
 		{
 			free(widths);
 			widths = malloc(sizeof(size_t) * cols);
-			cap = cols;
+			capacity = cols;
 		}
 
-		memset(widths, 0, sizeof(size_t) * cols);
+		if (!widths) break;
 
-		total_width = 0;
-
-		for (col = 0; col < cols; col++)
+		for (size_t i = 0; i < cols; i++)
 		{
-			size_t start = col * rows;
-			size_t end = start + rows;
-
-			if (end > files.size)
-				end = files.size;
-
-			for (i = start; i < end; i++)
-				if (files.data[i].name_len > widths[col])
-					widths[col] = files.data[i].name_len;
-
-			total_width += widths[col] + 2;
+			widths[i] = get_column_width(files, i, rows);
 		}
 
-		total_width -= 2;
+		if (get_total_width(widths, cols) <= term_width) break;
 
-		if (total_width <= term_width)
-		{
-			layout.cols = cols;
-			layout.rows = rows;
-			layout.widths = widths;
-			return layout;
-		}
-
-		cols--;
+		cols --;
 	}
 
-	layout.cols = 1;
-	layout.rows = files.size;
+	layout.cols = cols;
+	layout.rows = (files.size + cols - 1) / cols;
 	layout.widths = widths;
 
-	return layout;
+	return (layout);
 }
 
 void	normalPrint(t_files files)
