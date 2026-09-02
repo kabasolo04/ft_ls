@@ -2,15 +2,19 @@
 
 #define CACHE_SIZE 256
 
-static struct {
+static struct
+{
 	uid_t uid;
 	char *name;
-} g_uid_cache[CACHE_SIZE];
+}
+g_uid_cache[CACHE_SIZE];
 
-static struct {
+static struct
+{
 	gid_t gid;
 	char *name;
-} g_gid_cache[CACHE_SIZE];
+}
+g_gid_cache[CACHE_SIZE];
 
 static unsigned g_uid_cache_count = 0;
 static unsigned g_gid_cache_count = 0;
@@ -33,7 +37,9 @@ static char *get_user_cached(uid_t uid)
 	for (unsigned i = 0; i < g_uid_cache_count; i++)
 	{
 		if (g_uid_cache[i].uid == uid)
+		{
 			return g_uid_cache[i].name;
+		}
 	}
 
 	struct passwd *pw = getpwuid(uid);
@@ -53,7 +59,9 @@ static char *get_group_cached(gid_t gid)
 	for (unsigned i = 0; i < g_gid_cache_count; i++)
 	{
 		if (g_gid_cache[i].gid == gid)
+		{
 			return g_gid_cache[i].name;
+		}
 	}
 
 	struct group *gr = getgrgid(gid);
@@ -68,43 +76,11 @@ static char *get_group_cached(gid_t gid)
 	return gr ? gr->gr_name : "nogroup";
 }
 
-static char	file_tipe(mode_t mode)
-{
-	if (S_ISREG(mode))
-		return ('-');
-	if (S_ISDIR(mode))
-		return ('d');
-	if (S_ISLNK(mode))
-		return ('l');
-	if (S_ISBLK(mode))
-		return ('b');
-	if (S_ISCHR(mode))
-		return ('c');
-	if (S_ISSOCK(mode))
-		return ('s');
-	if (S_ISFIFO(mode))
-		return ('p');
-	return ('-');
-}
-
 static void	print_permissions(t_file f)
 {
-	char buf[12];
-	int idx = 0;
+	char	buf[12];
 
-	buf[idx++] = file_tipe(f.st.st_mode);
-
-	buf[idx++] = (f.st.st_mode & S_IRUSR) ? 'r' : '-';
-	buf[idx++] = (f.st.st_mode & S_IWUSR) ? 'w' : '-';
-	buf[idx++] = (f.st.st_mode & S_IXUSR) ? 'x' : '-';
-	buf[idx++] = (f.st.st_mode & S_IRGRP) ? 'r' : '-';
-	buf[idx++] = (f.st.st_mode & S_IWGRP) ? 'w' : '-';
-	buf[idx++] = (f.st.st_mode & S_IXGRP) ? 'x' : '-';
-	buf[idx++] = (f.st.st_mode & S_IROTH) ? 'r' : '-';
-	buf[idx++] = (f.st.st_mode & S_IWOTH) ? 'w' : '-';
-	buf[idx++] = (f.st.st_mode & S_IXOTH) ? 'x' : '-';
-	buf[idx++] = '.';
-	buf[idx]   = '\0';
+	build_permissions(buf, f.st.st_mode);
 
 	if (HAS_FLAG(g_flags, FLAG_g))
 		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_group_cached(f.st.st_gid), (long)f.st.st_size);

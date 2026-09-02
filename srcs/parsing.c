@@ -40,10 +40,9 @@ char	targetError(char* input)
 
 		ft_printf("ft_ls: cannot access '%s': %s", input, strerror(errno));
 
-		g_exit = 2;
+		firstFlag = 0;
+		g_exit	  = 2;
 	}
-
-	firstFlag = 0;
 
 	return 1;
 }

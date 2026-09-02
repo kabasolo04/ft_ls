@@ -54,8 +54,10 @@ t_files	getFiles(DIR *dir, char *path)
 	while ((entry = readdir(dir)))
 	{
 		if (entry->d_name[0] == '.' && !HAS_FLAG(g_flags, FLAG_a)) continue;
+
 		file.name = ft_strdup(entry->d_name);
 		if (!file.name) continue;
+
 		file.path = join_path(path, entry->d_name);
 		if (!file.path) { free(file.name); continue ;}
 
@@ -112,7 +114,7 @@ static void	merge_sort_helper(t_files *f, t_file *temp, int l, int r, t_cmp cmp)
 	merge(f, temp, l, m, r, cmp);
 }
 
-void	merge_sort(t_files *f, int l, int r, t_cmp cmp)
+void	merge_sort(t_files *f, int l, int r)
 {
 	if (l >= r || f->size == 0) return;
 
@@ -120,7 +122,7 @@ void	merge_sort(t_files *f, int l, int r, t_cmp cmp)
 
 	if (!temp) return;
 
-	merge_sort_helper(f, temp, l, r, cmp);
+	merge_sort_helper(f, temp, l, r, get_comparator());
 
 	free(temp);
 }

@@ -64,17 +64,20 @@ typedef struct s_files
 t_files;
 
 typedef	char (*t_cmp)(t_file* , t_file* );
-void	merge_sort(t_files* f, int l, int r, t_cmp cmp);
+void	merge_sort(t_files* f, int l, int r);
 
 t_files	getFiles(DIR* dir, char* path);
 void	free_files(t_files* f);
 
-char*	join_path(const char* dir, const char* name);
+void	printName(t_file data);
+void	build_permissions(char *buf, mode_t mode);
+
 char	cmp_time(t_file* a, t_file* b);
 char	cmp_size(t_file* a, t_file* b);
 char	cmp_alpha(t_file* a, t_file* b);
 char	cmp_nothing(t_file* a, t_file* b);
-void	printName(t_file data);
+t_cmp	get_comparator(void);
+char*	join_path(const char* dir, const char* name);
 
 char	flagError(char* input);
 char	targetError(char* input);

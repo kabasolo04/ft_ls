@@ -3,26 +3,11 @@
 int		g_flags = 0;
 char	g_exit = 0;
 
-static t_cmp	get_comparator(void)
+static int	finish()
 {
-	static const struct
-	{
-		int		flag;
-		t_cmp	cmp;
-	}
-	sorts[] =
-	{
-		{FLAG_U, cmp_nothing},
-		{FLAG_t, cmp_time},
-		{FLAG_S, cmp_size},
-	};
-
-	for (size_t i = 0; i < sizeof(sorts) / sizeof(sorts[0]); i++)
-	{
-		if (HAS_FLAG(g_flags, sorts[i].flag)) return (sorts[i].cmp);
-	}
-
-	return (cmp_alpha);
+	write(1, "\n", 1);
+	free_cache();
+	return g_exit;
 }
 
 static t_files	list_directory(DIR *dir, char *input)
@@ -33,7 +18,7 @@ static t_files	list_directory(DIR *dir, char *input)
 
 	closedir(dir);
 
-	merge_sort(&files, 0, files.size - 1, get_comparator());
+	merge_sort(&files, 0, files.size - 1);
 
 	return	files;
 }
@@ -121,7 +106,9 @@ int	main(int argc, char** argv)
 	}
 
 	if (targetNumber == 0)
-		return displayInfo("."), write(1, "\n", 1), free_cache(), g_exit;
+	{
+		return displayInfo("."), finish();
+	}
 
 	ADD_FLAG(g_flags, MULTI * (targetNumber > 1));
 	
@@ -130,5 +117,5 @@ int	main(int argc, char** argv)
 		if (argv[i][0] != '-' || argv[i][1] == ' ') displayInfo(argv[i]);
 	}
 
-	return write(1, "\n", 1), free_cache(), g_exit;
+	return finish();
 }
