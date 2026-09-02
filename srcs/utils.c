@@ -116,13 +116,13 @@ static const char	*getColor(const mode_t mode, const char *name)
 	if (S_ISFIFO(mode))	return YELLOW;
 	if (S_ISSOCK(mode))	return MAGENTA;
 
-	if (S_ISBLK(mode) || S_ISCHR(mode))	return YELLOW;
+	if (S_ISBLK(mode) || S_ISCHR(mode)) return YELLOW;
 
 	if (S_ISREG(mode))
 	{
-		if (is_compressed_file(name))	return RED;
+		if (is_compressed_file(name)) return RED;
 
-		if ((mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)	return GREEN;
+		if ((mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0) return GREEN;
 	}
 
 	return RESET;
@@ -132,7 +132,7 @@ void	printName(t_file data)
 {
 	char		buf[1024];
 	ssize_t		len;
-	const char *color;
+	const char*	color;
 
 	color = getColor(data.st.st_mode, data.name);
 

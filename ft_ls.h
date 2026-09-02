@@ -25,9 +25,6 @@
 #define RED_BG	"\033[41m"
 #define WHITE	"\033[97m"
 
-#define TRUE			(~0)		// 111...111
-#define FALSE			0			// 000...000
-
 #define FLAG_l			(1 << 0)	// ...001
 #define FLAG_g			(1 << 1)	// ...010
 #define FLAG_G			(1 << 2)	// ...100
@@ -66,17 +63,17 @@ typedef struct s_files
 }
 t_files;
 
-typedef	char (*t_cmp)(t_file *, t_file *);
-void	merge_sort(t_files *f, int l, int r, t_cmp cmp);
+typedef	char (*t_cmp)(t_file* , t_file* );
+void	merge_sort(t_files* f, int l, int r, t_cmp cmp);
 
-t_files	getFiles(DIR *dir, char *path);
-void	free_files(t_files *f);
+t_files	getFiles(DIR* dir, char* path);
+void	free_files(t_files* f);
 
-char	*join_path(const char *dir, const char *name);
-char	cmp_time(t_file *a, t_file *b);
-char	cmp_size(t_file *a, t_file *b);
-char	cmp_alpha(t_file *a, t_file *b);
-char	cmp_nothing(t_file *a, t_file *b);
+char*	join_path(const char* dir, const char* name);
+char	cmp_time(t_file* a, t_file* b);
+char	cmp_size(t_file* a, t_file* b);
+char	cmp_alpha(t_file* a, t_file* b);
+char	cmp_nothing(t_file* a, t_file* b);
 void	printName(t_file data);
 
 char	flagError(char* input);

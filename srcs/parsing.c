@@ -39,6 +39,7 @@ char	targetError(char* input)
 			write(1, "\n", 1);
 
 		ft_printf("ft_ls: cannot access '%s': %s", input, strerror(errno));
+
 		g_exit = 2;
 	}
 
