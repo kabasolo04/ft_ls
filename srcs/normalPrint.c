@@ -124,7 +124,8 @@ static t_layout	calculate_layout(t_files files, size_t term_width)
 	}
 
 	layout.cols = cols;
-	layout.rows = (files.size + cols - 1) / cols;
+	if (cols != 0)
+		layout.rows = (files.size + cols - 1) / cols;
 	layout.widths = widths;
 
 	return layout;
