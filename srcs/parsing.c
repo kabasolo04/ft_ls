@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-char	flagError(char* input)
+char	flag_error(char* input)
 {
 	if (input[0] != '-') return 0;
 
@@ -8,15 +8,17 @@ char	flagError(char* input)
 	{
 		switch (input[i])
 		{
-			case 'l': ADD_FLAG(g_flags, FLAG_l); break;
-			case 'g': ADD_FLAG(g_flags, FLAG_g); break;
-			case 'G': ADD_FLAG(g_flags, FLAG_G); break;
-			case 'a': ADD_FLAG(g_flags, FLAG_a); break;
-			case 'r': ADD_FLAG(g_flags, FLAG_r); break;
-			case 't': ADD_FLAG(g_flags, FLAG_t); break;
-			case 'S': ADD_FLAG(g_flags, FLAG_S); break;
-			case 'R': ADD_FLAG(g_flags, FLAG_R); break;
-			case 'U': ADD_FLAG(g_flags, FLAG_U); break;
+			case 'a': ADD_BIT(g_flags, FLAG_a); break;
+			case 'r': ADD_BIT(g_flags, FLAG_r); break;
+			case 'R': ADD_BIT(g_flags, FLAG_R); break;
+
+			case 'l': RM_BIT(g_flags, LONG_PRINT); ADD_BIT(g_flags, FLAG_l); break;
+			case 'g': RM_BIT(g_flags, LONG_PRINT); ADD_BIT(g_flags, FLAG_g); break;
+			case 'G': RM_BIT(g_flags, LONG_PRINT); ADD_BIT(g_flags, FLAG_G); break;
+			
+			case 't': RM_BIT(g_flags, SORT_FLAGS); ADD_BIT(g_flags, FLAG_t); break;
+			case 'S': RM_BIT(g_flags, SORT_FLAGS); ADD_BIT(g_flags, FLAG_S); break;
+			case 'U': RM_BIT(g_flags, SORT_FLAGS); ADD_BIT(g_flags, FLAG_U); break;
 		
 			default:
 				return ft_printf("ft_ls: invalid option -- '%c'\nOpen README.md in the root of this repo for more information.\n", input[i]), 1;
@@ -26,7 +28,7 @@ char	flagError(char* input)
 	return 0;
 }
 
-char	targetError(char* input)
+char	target_error(char* input)
 {
 	struct stat	st;
 	static char	firstFlag = 1;

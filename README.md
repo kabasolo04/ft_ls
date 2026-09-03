@@ -31,7 +31,7 @@ Implemented options:
 Extra options:
 
 - `-g` : like -l, but it does not list owner
-- `-G` : like -l, but it does not list group
+- `-G` : like -l, but it does not list group ([explanation](#why-g-differs-from-the-original))
 - `-S` : sort by size
 - `-U` : do not sort directory entries
 
@@ -126,3 +126,31 @@ Through this project, I learned about:
 ## 📜 License
 
 This project was developed for educational purposes at 42.
+
+---
+
+## Why `-G` differs from the original
+
+The -G option works a little differently from the original. In the original implementation, -G only has an effect when used together with -l.
+
+Here, I chose to make -G work independently of -l.
+
+For example:
+
+```bash
+ls -U
+```
+
+-U literally does nothing on its own.
+
+```bash
+ls -lU
+```
+
+Here, -U works because it is being used together with -l.
+
+```bash
+ls -u
+```
+
+On the other hand, -u, being a very similar flag, works without needing -l:

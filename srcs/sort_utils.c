@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-char	cmp_time(t_file *a, t_file *b)
+static char	cmp_time(t_file *a, t_file *b)
 {
 	if (a->st.st_mtime != b->st.st_mtime)
 	{
@@ -15,12 +15,12 @@ char	cmp_time(t_file *a, t_file *b)
 	return (ft_strcmp(a->name, b->name) < 0);
 }
 
-char	cmp_size(t_file *a, t_file *b)
+static char	cmp_size(t_file *a, t_file *b)
 {
 	return (a->st.st_size > b->st.st_size);
 }
 
-char	cmp_nothing(t_file *a, t_file *b)
+static char	cmp_nothing(t_file *a, t_file *b)
 {
 	(void)a;
 	(void)b;
@@ -28,7 +28,7 @@ char	cmp_nothing(t_file *a, t_file *b)
 	return 1;
 }
 
-char	cmp_alpha(t_file *a, t_file *b)
+static char	cmp_alpha(t_file *a, t_file *b)
 {
 	int	i;
 	int	ca, cb;
@@ -67,7 +67,7 @@ t_cmp	get_comparator(void)
 
 	for (size_t i = 0; i < sizeof(sorts) / sizeof(sorts[0]); i++)
 	{
-		if (HAS_FLAG(g_flags, sorts[i].flag)) return (sorts[i].cmp);
+		if (HAS_BIT(g_flags, sorts[i].flag)) return (sorts[i].cmp);
 	}
 
 	return (cmp_alpha);

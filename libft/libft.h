@@ -44,5 +44,7 @@ void	ft_putnbr_fd(int n, int fd);
 
 int		ft_printf(char const *s, ...);
 int		ft_strcmp(const char *s1, const char *s2);
+char*	ft_uitoa(unsigned int n);
+char*	ft_ultoa(unsigned long n);
 
 #endif //LIBFT.H

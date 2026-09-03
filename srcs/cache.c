@@ -19,7 +19,7 @@ g_gid_cache[CACHE_SIZE];
 static unsigned g_uid_cache_count = 0;
 static unsigned g_gid_cache_count = 0;
 
-void free_cache()
+void	free_cache()
 {
 	for (unsigned i = 0; i < g_uid_cache_count; i++)
 	{
@@ -32,7 +32,7 @@ void free_cache()
 	}
 }
 
-static char *get_user_cached(uid_t uid)
+char*	get_user_cached(uid_t uid)
 {
 	for (unsigned i = 0; i < g_uid_cache_count; i++)
 	{
@@ -54,7 +54,7 @@ static char *get_user_cached(uid_t uid)
 	return pw ? pw->pw_name : "nobody";
 }
 
-static char *get_group_cached(gid_t gid)
+char*	get_group_cached(gid_t gid)
 {
 	for (unsigned i = 0; i < g_gid_cache_count; i++)
 	{
@@ -74,44 +74,4 @@ static char *get_group_cached(gid_t gid)
 	}
 
 	return gr ? gr->gr_name : "nogroup";
-}
-
-static void	print_permissions(t_file f)
-{
-	char	buf[12];
-
-	build_permissions(buf, f.st.st_mode);
-
-	if (HAS_FLAG(g_flags, FLAG_g))
-		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_group_cached(f.st.st_gid), (long)f.st.st_size);
-	else if (HAS_FLAG(g_flags, FLAG_G))
-		ft_printf("%s %u %s %d ", buf, f.st.st_nlink, get_user_cached(f.st.st_uid), (long)f.st.st_size);
-	else
-		ft_printf("%s %u %s %s %d ", buf, f.st.st_nlink, get_user_cached(f.st.st_uid), get_group_cached(f.st.st_gid), (long)f.st.st_size);
-
-	char *date;
-	date = ctime(&f.st.st_mtime);
-	write(1, date + 4, 12);
-	write(1, " ", 1);
-}
-
-void	longPrint(t_files files)
-{
-	if (HAS_FLAG(g_flags, MULTI_TARGET)) write(1, "\n", 1);
-
-	ft_printf("total %u", files.file_size / 2);
-
-	if (files.size == 0) return;
-
-	write(1, "\n", 1);
-
-	print_permissions(files.data[0]);
-	printName(files.data[0]);
-
-	for (size_t i = 1; i < files.size; i++)
-	{
-		write(1, "\n", 1);
-		print_permissions(files.data[i]);
-		printName(files.data[i]);
-	}
 }

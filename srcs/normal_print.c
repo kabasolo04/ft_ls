@@ -39,7 +39,7 @@ void	print_columns(t_files files, t_layout layout)
 		
 			if (i >= files.size) continue;
 		
-			printName(files.data[i]);
+			print_name(files.data[i]);
 	
 			if (col != layout.cols - 1)
 			{
@@ -131,14 +131,14 @@ static t_layout	calculate_layout(t_files files, size_t term_width)
 	return layout;
 }
 
-void	normalPrint(t_files files)
+void	normal_print(t_files files)
 {
 	static size_t		term_width = 0;
 	t_layout			layout;
 
 	if (files.size == 0) return;
 
-	if (HAS_FLAG(g_flags, MULTI_TARGET)) write(1, "\n", 1);
+	if (HAS_BIT(g_flags, MULTI_TARGET)) write(1, "\n", 1);
 
 	if (term_width == 0)
 	{

@@ -40,10 +40,11 @@ static int	files_push(t_files *f, t_file file)
 	}
 
 	f->data[f->size++] = file;
-	return (1);
+
+	return 1;
 }
 
-t_files	getFiles(DIR *dir, char *path)
+t_files	get_files(DIR *dir, char *path)
 {
 	struct dirent*	entry;
 	t_files			files;
@@ -53,7 +54,7 @@ t_files	getFiles(DIR *dir, char *path)
 
 	while ((entry = readdir(dir)))
 	{
-		if (entry->d_name[0] == '.' && !HAS_FLAG(g_flags, FLAG_a)) continue;
+		if (entry->d_name[0] == '.' && !HAS_BIT(g_flags, FLAG_a)) continue;
 
 		file.name = ft_strdup(entry->d_name);
 		if (!file.name) continue;
@@ -73,20 +74,21 @@ t_files	getFiles(DIR *dir, char *path)
 
 static void	merge(t_files *f, t_file *temp, int l, int m, int r, t_cmp cmp)
 {
-	int n1 = m - l + 1;
-	int n2 = r - m;
+	int	n1	= m - l + 1;
+	int	n2	= r - m;
+	int	i	= 0;
+	int	j	= 0;
+	int	k	= l;
 
-	for (int i = 0; i < n1; i++)
-		temp[l + i] = f->data[l + i];
+	for (int n = 0; n < n1; n++)
+		temp[l + n] = f->data[l + n];
 
-	for (int j = 0; j < n2; j++)
-		temp[m + 1 + j] = f->data[m + 1 + j];
-
-	int i = 0, j = 0, k = l;
+	for (int n = 0; n < n2; n++)
+		temp[m + 1 + n] = f->data[m + 1 + n];
 
 	while (i < n1 && j < n2)
 	{
-		if (cmp(&temp[l + i], &temp[m + 1 + j]) ^ HAS_FLAG(g_flags, FLAG_r)) // 0 0 -> 0 // 1 0 -> 1 // 0 1 -> 1 // 1 1 -> 0
+		if (cmp(&temp[l + i], &temp[m + 1 + j]) ^ HAS_BIT(g_flags, FLAG_r)) // ^ == XOR It flips the result of the cmp()
 		{
 			f->data[k++] = temp[l + i++];
 		}
@@ -111,6 +113,7 @@ static void	merge_sort_helper(t_files *f, t_file *temp, int l, int r, t_cmp cmp)
 
 	merge_sort_helper(f, temp, l, m, cmp);
 	merge_sort_helper(f, temp, m + 1, r, cmp);
+
 	merge(f, temp, l, m, r, cmp);
 }
 
